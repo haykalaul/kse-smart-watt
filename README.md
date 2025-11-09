@@ -1,1 +1,1 @@
-# Aplikasi SIstem Smart Home
+# Aplikasi Sistem Smart Home
