@@ -13,10 +13,30 @@ import (
 
 func SetupDatabase() (*gorm.DB, error) {
 	user := os.Getenv("DB_USER")
+	if user == "" {
+		user = "postgres"
+	}
 	host := os.Getenv("DB_HOST")
+	if host == "" {
+		host = "localhost"
+	}
 	dbPort := os.Getenv("DB_PORT")
+	if dbPort == "" {
+		dbPort = "5432"
+	}
 	dbName := os.Getenv("DB_NAME")
+	if dbName == "" {
+		dbName = "kse_smart_watt"
+	}
 	password := os.Getenv("DB_PASSWORD")
+	if password == "" {
+		password = "password"
+	}
+
+	mode := os.Getenv("MODE")
+	if mode == "" {
+		mode = "development"
+	}
 
 	var dsn string
 	if mode == "development" {
