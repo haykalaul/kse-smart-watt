@@ -10,6 +10,7 @@ import (
 
 type ApplianceService interface {
 	CreateAppliance(appliance *entity.ApplianceRequest) (*entity.Appliance, error)
+	BatchCreateAppliances(appliances []*entity.ApplianceRequest) error
 	GetAllAppliances() ([]entity.ApplianceResponse, error)
 	GetApplianceByID(id uint) (*entity.Appliance, error)
 	UpdateApplianceByID(id uint, appliance *entity.Appliance) (*entity.Appliance, error)
@@ -44,6 +45,27 @@ func (s *applianceService) CreateAppliance(applianceReq *entity.ApplianceRequest
 		AverageUsage: applianceReq.AverageUsage,
 	}
 	return s.applianceRepo.Create(appliance)
+}
+
+func (s *applianceService) BatchCreateAppliances(applianceReqs []*entity.ApplianceRequest) error {
+	var appliances []*entity.Appliance
+	for _, req := range applianceReqs {
+		appliance := &entity.Appliance{
+			Name:         req.Name,
+			Type:         req.Type,
+			Location:     req.Location,
+			Power:        req.Power,
+			Energy:       req.Energy,
+			Cost:         req.Cost,
+			Status:       req.Status,
+			Connectivity: req.Connectivity,
+			Priority:     req.Priority,
+			UsageToday:   req.UsageToday,
+			AverageUsage: req.AverageUsage,
+		}
+		appliances = append(appliances, appliance)
+	}
+	return s.applianceRepo.BatchCreate(appliances)
 }
 
 func (s *applianceService) GetAllAppliances() ([]entity.ApplianceResponse, error) {

@@ -31,7 +31,8 @@ func (s *fileService) SaveTable(table string) error {
 	log.Printf("debug: saving table to redis, len=%d", len(table))
 	if err := s.RedisRepository.Save("table", table); err != nil {
 		log.Printf("error: failed save table to redis: %v", err)
-		return err
+		// Return nil to not fail the upload if Redis is down
+		return nil
 	}
 	return nil
 }

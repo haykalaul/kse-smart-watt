@@ -8,6 +8,7 @@ import (
 
 type ApplianceRepository interface {
 	Create(appliance *entity.Appliance) (*entity.Appliance, error)
+	BatchCreate(appliances []*entity.Appliance) error
 	FindAll() ([]entity.Appliance, error)
 	FindByID(id uint) (*entity.Appliance, error)
 	FindByName(name string) (*entity.Appliance, error)
@@ -29,6 +30,10 @@ func (r *applianceRepository) Create(appliance *entity.Appliance) (*entity.Appli
 		return nil, err
 	}
 	return appliance, nil
+}
+
+func (r *applianceRepository) BatchCreate(appliances []*entity.Appliance) error {
+	return r.db.CreateInBatches(appliances, 100).Error
 }
 
 func (r *applianceRepository) FindAll() ([]entity.Appliance, error) {
